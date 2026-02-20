@@ -220,10 +220,20 @@ code-reviewerの指摘と追加レビューの指摘を統合し、以下の重�
 
 2. 画面にもサマリーを表示する
 
-## ステップ7: READMEの更新
+## ステップ7: README・関連ドキュメントの更新
 
-修正が1件以上ある場合、コードの変更によりREADMEの記載内容が実装と乖離している可能性がある。
-`/update-readme` スキルを実行してREADMEを最新の実装に合わせて更新する。
+修正が1件以上ある場合、コードの変更によりREADMEや関連ドキュメントの記載内容が実装と乖離している可能性がある。
+`/update-readme` スキルを実行してドキュメントを最新の実装に合わせて更新する。
+
+**重要**: `/update-readme` を実行する前に、修正内容のサマリーをテキストで提示すること。これにより、update-readmeスキルが変更箇所を正確に把握してドキュメントを更新できる。
+
+提示するサマリーの例：
+```
+以下のコード修正を行いました。この変更に基づいてドキュメントを更新してください：
+- video_preview.py: _resolve_source_pathをImageExtractor.resolve_video_pathに委譲
+- log_reader.py: "start_time"マジックストリングを定数ACTIVITY_LOG_KEY_START_TIMEに置換
+- image_extractor.py: resolve_video_paths_from_logクラスメソッドを追加（CLI/GUI共通化）
+```
 
 ## ステップ8: コミットメッセージの作成
 
