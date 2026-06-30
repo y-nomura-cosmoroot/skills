@@ -1,0 +1,16 @@
+{
+  "designs": [
+    {
+      "name": "design-1",
+      "sourcePptx": "Maurelle.pptx",
+      "designMdPath": "references/design-1/DESIGN.md",
+      "features": "寒色グラデーション（ティール#00A09C → ブルー#1991AB → インディゴ#5267A5）を面・図形の差し色に使い、テキストはグレースケール2段（見出し#494949／本文#999999）で静かに整える。完全フラット・影なし・枠線なし・角丸なし。表紙は全面ティール背景＋同系色正方形の入れ子が象徴。見出しはMontserrat SemiBold、本文はLato Light。大判キャンバスで広い余白と3カラム反復グリッド。"
+    },
+    {
+      "name": "design-2",
+      "sourcePptx": "Howard.pptx",
+      "designMdPath": "references/design-2/DESIGN.md",
+      "features": "白地 × スレートブルー#5363B4 主役 × パステル6色のマルチアクセント。本文は純黒を避けた濃紺#141432。角丸はカードで1.25rem（20px）とやや大きめ。ブランドカラー由来のソフトシャドウrgba(56,56,116,0.1)。HeroとCTAに135deg斜めグラデーション。和文はNoto Sans JP、英字・数字はManrope。やわらかく親しみやすいSaaSプロダクトLP風。"
+    }
+  ]
+}
