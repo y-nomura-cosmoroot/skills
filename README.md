@@ -10,8 +10,10 @@ Claude Code で使えるカスタムスキル（スラッシュコマンド）�
 | [commit-changes](commit-changes/) | `/commit-changes` | 未コミットの変更を分析し、コミットメッセージを自動生成 |
 | [compress-video](compress-video/) | `/compress-video` | FFmpeg で動画ファイルを圧縮してファイルサイズを削減 |
 | [create-pr](create-pr/) | `/create-pr` | ブランチ名とコミット内容からPRを自動作成 |
+| [create-slides-html](create-slides-html/) | `/create-slides-html` | reveal.js + Tailwind CSS でAIっぽさを消したHTMLスライドを作成 |
 | [review-and-fix](review-and-fix/) | `/review-and-fix` | PRをレビューし、指摘を重要度順に1件ずつ確認・修正 |
 | [rewrite-ai-tone](rewrite-ai-tone/) | `/rewrite-ai-tone` | AI が書いた文章を自然な日本語にリライト |
+| [rewrite-for-onenote](rewrite-for-onenote/) | `/rewrite-for-onenote` | `from_notebooklm.md` のAI臭を消してOneNote向けに整形し `to_onenote.md` へ出力 |
 | [search-skills](search-skills/) | `/search-skills` | 要望に合った Claude Code スキルをキュレーションリストから検索 |
 | [update-readme](update-readme/) | `/update-readme` | README を最新の実装内容に基づいて更新 |
 
@@ -45,6 +47,19 @@ MP4 などの動画ファイルを FFmpeg で圧縮します。FFmpeg が未導�
 - 未コミット・未プッシュの変更を検出して事前に警告
 - PR作成前にプレビューを表示してユーザー確認
 
+### create-slides-html
+
+reveal.js + Tailwind CSS(CDN) で、人が作ったように見える高品質なHTMLスライドを作成します。ヒアリング→レポート確認→AI臭除去→デザインシステム適用という構造化ワークフローで、AIっぽい見た目と文章を排除します。
+
+- 成果物は単一のHTMLファイル（reveal.js / Tailwind / Chart.js を CDN 読み込み）
+- 参照PPTX / 参照サイトが指定された場合は `create-design-md(-from-pptx)` でデザイントークンを抽出して Tailwind config に反映
+- 参照なしの場合は `references/designs.json` に登録されたデザイン一覧から選択（design-1: Maurelle、design-2: Howard 等）
+- スライド作成前にレポート形式で目的・構成・スライド案をユーザー確認
+- グラフは Chart.js（CDN）で描画、図解は `div` / SVG で組む（`ul` / `ol` / `li` は禁止）
+- カスタムクラスは `c-` プレフィックスで Tailwind config に集約、カラーコード直書きは禁止
+
+デザイン定義は `references/design-N/DESIGN.md`、実装の構造ルールは `references/structure.md` を参照する構成。
+
 ### review-and-fix
 
 指定した PR の diff をレビューし、指摘事項を重要度順（Critical → High → Medium → Low → Info）に1件ずつ提示します。
@@ -64,6 +79,19 @@ AI が書いた文章を、人が書いたような自然な日本語に書き�
 - 前置き宣言や安全クッション表現を削除
 - 抽象語を動詞中心の具体的表現に置換
 - 意味と事実関係は変えずにリライト
+
+### rewrite-for-onenote
+
+カレントディレクトリの `from_notebooklm.md` を読み込み、AI臭を除去したうえで OneNote 向けの書式に整形して `to_onenote.md` へ書き出します。NotebookLM の出力を社内の議事録メモに貼り込むワークフローを想定。
+
+- `/rewrite-ai-tone` のルールでAI臭を除去
+- 大見出しは ━ の罫線で挟み、サブ見出しには ■、列挙は全角スペース＋中黒
+- 段落間の空行を入れない（OneNote では空行が二重行間になるため）
+- 一文一行、行末の句点は付けない
+- 敬称の「氏」は「さん」に自動置換
+- 議事録として報告調（「〜が共有された」「〜という話」）で書く
+- 冒頭の大見出しは内容に即したタイトル（汎用的な「エグゼクティブ・サマリー」は避ける）
+- `to_onenote.md` に既存内容があれば AskUserQuestion で上書き確認
 
 ### search-skills
 
@@ -102,19 +130,25 @@ AI が書いた文章を、人が書いたような自然な日本語に書き�
 
 ```
 skills/
-├── commit-changes/    # コミットメッセージ自動生成
+├── commit-changes/       # コミットメッセージ自動生成
 │   └── SKILL.md
-├── compress-video/    # 動画圧縮
+├── compress-video/       # 動画圧縮
 │   └── SKILL.md
-├── create-pr/         # PR自動作成
+├── create-pr/            # PR自動作成
 │   └── SKILL.md
-├── review-and-fix/    # PRレビュー＆修正
+├── create-slides-html/   # reveal.js + Tailwind HTMLスライド作成
+│   ├── SKILL.md
+│   ├── assets/           # base.html などの雛形
+│   └── references/       # design.md / structure.md / designs.json / design-N/
+├── review-and-fix/       # PRレビュー＆修正
 │   └── SKILL.md
-├── rewrite-ai-tone/   # AI臭リライト
+├── rewrite-ai-tone/      # AI臭リライト
 │   └── SKILL.md
-├── search-skills/     # スキル検索
+├── rewrite-for-onenote/  # OneNote向け整形（from_notebooklm.md → to_onenote.md）
 │   └── SKILL.md
-└── update-readme/     # README更新
+├── search-skills/        # スキル検索
+│   └── SKILL.md
+└── update-readme/        # README更新
     └── SKILL.md
 ```
 
@@ -123,3 +157,5 @@ skills/
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) がインストールされていること
 - `create-pr` / `review-and-fix` は [GitHub CLI (gh)](https://cli.github.com/) が必要
 - `compress-video` は [FFmpeg](https://ffmpeg.org/) が必要（未導入の場合は自動ダウンロード）
+- `create-slides-html` の成果物HTMLはブラウザで開いて閲覧（reveal.js / Tailwind / Chart.js は CDN 経由のためオフライン閲覧は不可）
+- `rewrite-for-onenote` はカレントディレクトリに `from_notebooklm.md` を配置してから実行
