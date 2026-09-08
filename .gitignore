@@ -1,2 +1,5 @@
 compress-video/bin/*.exe
 .vscode/settings.json
+from_notebooklm.md
+to_onenote.md
+create-slides-html/references/**/*.pptx
